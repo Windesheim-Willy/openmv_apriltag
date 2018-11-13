@@ -9,8 +9,6 @@ services:
     restart: always
     volumes:
       - "./:/src"
-    ports:
-      - "3000:3000"
     command: roslaunch rosserial_server serial.launch baud:=115200 port:=/dev/ttyACM0
 
 networks:
