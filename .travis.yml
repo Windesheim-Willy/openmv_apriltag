@@ -6,4 +6,4 @@ services:
   - docker
 
 script:
-  - docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+  - docker build -t windesheimwinny/openmv_apriltag -f docker/Dockerfile .
