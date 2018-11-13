@@ -60,7 +60,7 @@ while(True):
 
         # Print can be used for development purpose
         #print("%d, %f, %s" % print_args)
-        usb_vcp.send("%d, %f, %s" % output_args, timeout=0)
+        usb_vcp.send("%d, %f, %s\n" % output_args, timeout=0)
 
 
 
