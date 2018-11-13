@@ -1,7 +1,6 @@
 # Override compose file for ROS-master with local build of the container.
-    version: '2.1'
+version: '2.1'
 
-    services:
-      openmv_apriltag:
-
+services:
+  openmv_apriltag:
     build: ./docker

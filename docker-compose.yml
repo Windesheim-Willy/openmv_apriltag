@@ -2,8 +2,16 @@
 version: '2.1'
 
 services:
-  <component name>:
+  openmv_apriltag:
     image: windesheimwinny/openmv_apriltag:latest
     networks:
       - ros
     restart: always
+    volumes:
+      - "./:/src"
+    ports:
+      - "3000:3000"
+    command: roslaunch rosserial_server serial.launch baud:=115200 port:=/dev/ttyACM0
+
+networks:
+  ros:
