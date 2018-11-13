@@ -1,0 +1,9 @@
+# Main compose file for ROS-master with the container from Dockerhub.
+version: '2.1'
+
+services:
+  <component name>:
+    image: windesheimwinny/openmv_apriltag:latest
+    networks:
+      - ros
+    restart: always
