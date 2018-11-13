@@ -59,7 +59,7 @@ while(True):
         output_args = (tag.id(),rotation, rhumb)
 
         # Print can be used for development purpose
-        #print("%d, %f, %s" % print_args)
+        #print("%d, %f, %s" % output_args)
         usb_vcp.send("%d, %f, %s\n" % output_args, timeout=0)
 
 
