@@ -1,21 +1,29 @@
- def spinonce(self):
-        """Spin to read."""
-        lines = []
-        received = False
+#!/usr/bin/env python
+import serial
+import rospy
+from std_msgs.msg import String
 
-        while self.serial.in_waiting:
-            line = self.serial.readline()
-            lines.append(line)
-            received = True
+# To which topic on Willy we will publish
+topicName ='openmv_apriltag'
 
-        codes = []
-        if received:
-            for line in lines:
-                code = self.parseline(line)
-                if code is not None:
-                    codes.append(code)
+# Init ROS components
+rospy.init_node('topic_publisher')
+topicInstance = rospy.Publisher(topicName, String ,queue_size=25)
+rate = rospy.Rate(2)
+topicMessage = "Empty"
 
-            self.msg.header.stamp = (rospy.Time.now() - self.delay)
-            self.msg.barcodes = codes
-            self.barcode_to_world(self.msg)
-            self.topic.publish(self.msg)
+# Init serial components
+socket = serial.Serial()
+socket.baudrate = 115200
+socket.port = '/dev/ttyACM0'
+socket.timeout = 1
+socket.open()
+
+
+while not rospy.is_shutdown(): 
+    topicMessage = socket.readline()
+	topicMessage = topicMessage.rstrip()
+    topicInstance.publish(topicMessage)
+    print(topicMessage)
+    rate.sleep()
+

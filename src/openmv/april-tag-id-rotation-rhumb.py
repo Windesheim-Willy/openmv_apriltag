@@ -3,12 +3,7 @@
 
 import sensor, image, time, math, pyb
 
-# Init serial over USB
-usb_vcp = pyb.USB_VCP()
-usb_vcp.setinterrupt(-1)
-
 sensor.reset()
-# Color
 sensor.set_pixformat(sensor.RGB565)
 # Highest possible res for the current memory
 sensor.set_framesize(sensor.VGA)
@@ -18,6 +13,10 @@ sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False)
 sensor.set_auto_whitebal(False)
 clock = time.clock()
+
+# Init serial over USB
+usb_vcp = pyb.USB_VCP()
+usb_vcp.setinterrupt(-1)
 
 rhumbs = [
     (0,"N"),
@@ -49,18 +48,22 @@ def GetRhumb(rotation):
 while(True):
     clock.tick()
     img = sensor.snapshot()
-    for tag in img.find_apriltags(): # default settings finds only TAG36H11 types
-        img.draw_rectangle(tag.rect(), color = (255, 0, 0))
-        img.draw_cross(tag.cx(), tag.cy(), color = (0, 255, 0))
+    tags = img.find_apriltags()
+    if(len(tags) > 0):
+        for tag in tags: # default settings searches only for TAG36H11
+            img.draw_rectangle(tag.rect(), color = (255, 0, 0))
+            img.draw_cross(tag.cx(), tag.cy(), color = (0, 255, 0))
 
-        correction = 180
-        rotation = (correction * tag.rotation()) / math.pi
-        rhumb = GetRhumb(rotation)
-        output_args = (tag.id(),rotation, rhumb)
+            correction = 180
+            rotation = (correction * tag.rotation()) / math.pi
+            rhumb = GetRhumb(rotation)
+            output_args = (tag.id(),rotation, rhumb)
 
-        # Print can be used for development purpose
-        #print("%d, %f, %s" % output_args)
-        usb_vcp.send("%d, %f, %s\n" % output_args, timeout=0)
+            #print("%d, %f, %s\n" % output_args)
+            usb_vcp.send("%d, %f, %s\n" % output_args, timeout=0)
+    else:
+        #print("NoTags\n")
+        usb_vcp.send("NoTags\n", timeout=0)
 
 
 
