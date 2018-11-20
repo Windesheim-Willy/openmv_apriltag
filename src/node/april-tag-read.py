@@ -25,5 +25,4 @@ while not rospy.is_shutdown():
     topicMessage = topicMessage.rstrip()
     topicInstance.publish(topicMessage)
     print(topicMessage)
-    rate.sleep()
 
