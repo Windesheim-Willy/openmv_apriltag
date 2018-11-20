@@ -4,19 +4,20 @@
 import sensor, image, time, math, pyb
 
 sensor.reset()
-sensor.set_pixformat(sensor.RGB565)
+sensor.set_pixformat(sensor.GRAYSCALE)
 # Highest possible res for the current memory
 sensor.set_framesize(sensor.VGA)
 # Zoom in on a center part of the image
-sensor.set_windowing((160, 120))
+sensor.set_windowing((320, 120))
 sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False)
 sensor.set_auto_whitebal(False)
 clock = time.clock()
 
-# Init serial over USB
-usb_vcp = pyb.USB_VCP()
-usb_vcp.setinterrupt(-1)
+# Init virtual com port
+usb = pyb.USB_VCP()
+usb.setinterrupt(-1)
+
 
 rhumbs = [
     (0,"N"),
@@ -44,7 +45,6 @@ def GetRhumb(rotation):
             return value
 
 
-
 while(True):
     clock.tick()
     img = sensor.snapshot()
@@ -59,11 +59,10 @@ while(True):
             rhumb = GetRhumb(rotation)
             output_args = (tag.id(),rotation, rhumb)
 
-            #print("%d, %f, %s\n" % output_args)
-            usb_vcp.send("%d, %f, %s\n" % output_args, timeout=0)
+            usb.send("%d, %f, %s\n" % output_args)
     else:
-        #print("NoTags\n")
-        usb_vcp.send("NoTags\n", timeout=0)
+         usb.send("NoTags\n")
+
 
 
 
