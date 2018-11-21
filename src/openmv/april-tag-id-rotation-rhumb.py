@@ -61,7 +61,7 @@ while(True):
 
             usb.send("%d, %f, %s\n" % output_args)
     else:
-         usb.send("NoTags\n")
+         usb.send("0,0,0\n")
 
 
 
