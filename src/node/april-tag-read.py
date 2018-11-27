@@ -4,13 +4,10 @@ import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
-# To which topic on Willy we will publish
-openmvTopicName ='openmv_apriltag'
-
 # Init ROS components
 rospy.init_node('topic_publisher')
 openmvTopic = rospy.Publisher("openmv_apriltag", String , queue_size=25)
-poseTopic = rospy.Publisher("initialpose ", PoseWithCovarianceStamped, queue_size=25)
+poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size=25)
 
 
 # Init serial components
@@ -20,9 +17,12 @@ socket.port = '/dev/ttyACM0'
 socket.timeout = 1
 socket.open()
 
+# Init global components
+#aprilTag = tuple()
+
 # Build tag location dictionary
-tagLocations = 
-{1:(13.489720850756148, 60.59727947971955, 0.0),
+tagLocations = {
+1:(13.489720850756148, 60.59727947971955, 0.0),
 2:(15.934169265195797, 60.933202561559746, 0.0),
 3:(20.810319786490506, 60.41751882276302, 0.0),
 4:(24.50055443446291, 60.43755116603776, 0.0),
@@ -43,18 +43,31 @@ tagLocations =
 19:(16.299067248414662, 55.46434990288788, 0.0),
 20:(12.100164063844309, 55.42996574075256, 0.0),
 21:(9.65735918277374, 55.445542959329764, 0.0),
+24:(5.65735918277374, 55.445542959329764, 0.0),
 528:(43.65193339638883, 60.123809610098775, 0.0)
 }
 
 
 while not rospy.is_shutdown(): 
-	# Read and publish OpenMV data
+    # Read OpenMV data
     openmvMessage = socket.readline()
     openmvMessage = openmvMessage.rstrip()
+    aprilTag = tuple((
+    float(openmvMessage.split(",")[0]), 
+    float(openmvMessage.split(",")[1]), 
+    openmvMessage.split(",")[2]
+    ))
+
+    # Publish OpenMV data
     openmvTopic.publish(openmvMessage)
-	print(openmvMessage)
+    print(openmvMessage)
 	
-	# Publish pose data
-	poseTopic.publish(PoseWithCovarianceStamped(0,0,0))
-    print(PoseWithCovarianceStamped(0,0,0)
+    # Publish pose data
+    tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
+    poseMessage = PoseWithCovarianceStamped()
+    poseMessage.pose.pose.position.x = tagLocation[0]
+    poseMessage.pose.pose.position.y = tagLocation[1]
+    poseMessage.pose.pose.position.z = tagLocation[2]
+    poseTopic.publish(poseMessage)
+    print(poseMessage.pose.pose)
 
