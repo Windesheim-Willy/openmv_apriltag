@@ -18,7 +18,7 @@ socket.timeout = 1
 socket.open()
 
 # Init global components
-#aprilTag = tuple()
+aprilTag = tuple()
 
 # Build tag location dictionary
 tagLocations = {
@@ -49,26 +49,26 @@ tagLocations = {
 
 
 while not rospy.is_shutdown():
-    # Read OpenMV data
-    openmvMessage = socket.readline()
-    openmvMessage = openmvMessage.rstrip()
-    aprilTag = tuple((
-    float(openmvMessage.split(",")[0]),
-    float(openmvMessage.split(",")[1]),
-    openmvMessage.split(",")[2]
-    ))
+	# Read OpenMV data
+	openmvMessage = socket.readline()
+	openmvMessage = openmvMessage.rstrip()
+	aprilTag = tuple((
+	float(openmvMessage.split(",")[0]),
+	float(openmvMessage.split(",")[1]),
+	openmvMessage.split(",")[2]
+	))
 
-    # Publish OpenMV data
-    openmvTopic.publish(openmvMessage)
-    print(openmvMessage)
+	# Publish OpenMV data
+	openmvTopic.publish(openmvMessage)
+	print(openmvMessage)
 
-    # Publish pose data
-    if aprilTag[0] > 0:
-        tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
-        poseMessage = PoseWithCovarianceStamped()
-        poseMessage.pose.pose.position.x = tagLocation[0]
-        poseMessage.pose.pose.position.y = tagLocation[1]
-        poseMessage.pose.pose.position.z = tagLocation[2]
-        poseTopic.publish(poseMessage)
-        print(poseMessage.pose.pose)
+	# Publish pose data
+	if aprilTag[0] > 0:
+		tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
+		poseMessage = PoseWithCovarianceStamped()
+		poseMessage.pose.pose.position.x = tagLocation[0]
+		poseMessage.pose.pose.position.y = tagLocation[1]
+		poseMessage.pose.pose.position.z = tagLocation[2]
+		poseTopic.publish(poseMessage)
+		print(poseMessage.pose.pose)
 
