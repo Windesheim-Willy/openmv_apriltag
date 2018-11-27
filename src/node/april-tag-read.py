@@ -48,26 +48,27 @@ tagLocations = {
 }
 
 
-while not rospy.is_shutdown(): 
+while not rospy.is_shutdown():
     # Read OpenMV data
     openmvMessage = socket.readline()
     openmvMessage = openmvMessage.rstrip()
     aprilTag = tuple((
-    float(openmvMessage.split(",")[0]), 
-    float(openmvMessage.split(",")[1]), 
+    float(openmvMessage.split(",")[0]),
+    float(openmvMessage.split(",")[1]),
     openmvMessage.split(",")[2]
     ))
 
     # Publish OpenMV data
     openmvTopic.publish(openmvMessage)
     print(openmvMessage)
-	
+
     # Publish pose data
-    tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
-    poseMessage = PoseWithCovarianceStamped()
-    poseMessage.pose.pose.position.x = tagLocation[0]
-    poseMessage.pose.pose.position.y = tagLocation[1]
-    poseMessage.pose.pose.position.z = tagLocation[2]
-    poseTopic.publish(poseMessage)
-    print(poseMessage.pose.pose)
+    if aprilTag[0] > 0:
+        tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
+        poseMessage = PoseWithCovarianceStamped()
+        poseMessage.pose.pose.position.x = tagLocation[0]
+        poseMessage.pose.pose.position.y = tagLocation[1]
+        poseMessage.pose.pose.position.z = tagLocation[2]
+        poseTopic.publish(poseMessage)
+        print(poseMessage.pose.pose)
 
