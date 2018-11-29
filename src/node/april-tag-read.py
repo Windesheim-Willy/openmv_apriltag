@@ -66,6 +66,8 @@ while not rospy.is_shutdown():
 	if aprilTag[0] > 0:
 		tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
 		poseMessage = PoseWithCovarianceStamped()
+		poseMessage.header.sec = 0
+		poseMessage.header.frame_id = "map"
 		poseMessage.pose.pose.position.x = tagLocation[0]
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = tagLocation[2]
