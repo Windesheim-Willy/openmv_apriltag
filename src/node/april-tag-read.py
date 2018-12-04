@@ -64,30 +64,6 @@ while not rospy.is_shutdown():
 	openmvTopic.publish(openmvMessage)
 	print(openmvMessage)
 
- 	# Publish test msg
-	if aprilTag[0] > 0:
-		poseMessage = PoseWithCovarianceStamped()
-
-		poseMessage.header.seq = 0
-		poseMessage.header.frame_id = "map"
-		poseMessage.header.stamp.secs = rospy.get_rostime().secs
-		poseMessage.header.stamp.nsecs = rospy.get_rostime().nsecs
-
-		poseMessage.pose.pose.position.x = 14.412946227
-		poseMessage.pose.pose.position.y = 55.5733793458
-		poseMessage.pose.pose.position.z = 0.0
-
-		poseMessage.pose.pose.orientation.x = 0.0
-		poseMessage.pose.pose.orientation.y = 0.0
-		poseMessage.pose.pose.orientation.z = 0.999994075137
-		poseMessage.pose.pose.orientation.w = 0.00344233787632
-
-		poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
-
-		poseTopic.publish(poseMessage)
-		print(poseMessage)
-		sleep(1)
-
 	# Publish pose data
 	if aprilTag[0] > 0:
 		tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
@@ -100,6 +76,14 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.x = tagLocation[0]
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = tagLocation[2]
-		#poseTopic.publish(poseMessage)
-		#print(poseMessage)
-		#sleep(1)
+
+		poseMessage.pose.pose.orientation.x = 0.0
+		poseMessage.pose.pose.orientation.y = 0.0
+		poseMessage.pose.pose.orientation.z = 0.0
+		poseMessage.pose.pose.orientation.w = 0.0
+
+		poseMessage.pose.covariance = [0.01, 0.01, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01]
+
+		poseTopic.publish(poseMessage)
+		print(poseMessage)
+		sleep(1)
