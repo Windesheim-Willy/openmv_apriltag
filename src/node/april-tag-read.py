@@ -88,7 +88,7 @@ while not rospy.is_shutdown():
 
 	# Publish OpenMV data
 	openmvTopic.publish(openmvMessage)
-	print(openmvMessage)
+	#print(openmvMessage)
 
 	# Publish pose data
 	if aprilTag[0] > 0:
@@ -103,8 +103,9 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = 0.0
 		
-		degrees = aprilTag[1] + 90
-		degrees = (degrees + (degrees % 360) + 360) % 360
+		degrees = aprilTag[1] - 90
+		#degrees = (degrees + (degrees % 360) + 360) % 360
+		print(GetRhumb(degrees))
 		radians = (math.pi/180) * degrees
 		poseMessage.pose.pose.orientation.x = 0.0
 		poseMessage.pose.pose.orientation.y = 0.0
@@ -114,5 +115,5 @@ while not rospy.is_shutdown():
 		poseMessage.pose.covariance = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0]
 
 		poseTopic.publish(poseMessage)
-		print(poseMessage)
+		#print(poseMessage)
 		sleep(0.5)
