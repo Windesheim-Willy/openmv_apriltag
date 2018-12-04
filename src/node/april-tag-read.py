@@ -88,7 +88,7 @@ while not rospy.is_shutdown():
 
 	# Publish OpenMV data
 	openmvTopic.publish(openmvMessage)
-	#print(openmvMessage)
+	print(openmvMessage)
 
 	# Publish pose data
 	if aprilTag[0] > 0:
@@ -115,5 +115,5 @@ while not rospy.is_shutdown():
 		poseMessage.pose.covariance = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0]
 
 		poseTopic.publish(poseMessage)
-		#print(poseMessage)
+		print(poseMessage)
 		sleep(0.5)
