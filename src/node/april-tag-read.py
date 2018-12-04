@@ -2,6 +2,7 @@
 import serial
 import rospy
 import time
+import math
 from time import sleep
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
@@ -15,7 +16,7 @@ poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size
 # Init serial components
 socket = serial.Serial()
 socket.baudrate = 115200
-socket.port = '/dev/ttyACM1'
+socket.port = '/dev/ttyACM0'
 socket.timeout = 1
 socket.open()
 
@@ -77,10 +78,11 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = 0.0
 
+		s = math.sin(aprilTag[1]/2);
 		poseMessage.pose.pose.orientation.x = 0.0
 		poseMessage.pose.pose.orientation.y = 0.0
-		poseMessage.pose.pose.orientation.z = 0.999994075137
-		poseMessage.pose.pose.orientation.w = 0.00344233787632
+		poseMessage.pose.pose.orientation.z = 0.0
+		poseMessage.pose.pose.orientation.w = math.cos(aprilTag[1]/2);
 
 		poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
 
