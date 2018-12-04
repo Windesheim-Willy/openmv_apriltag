@@ -16,7 +16,7 @@ poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size
 # Init serial components
 socket = serial.Serial()
 socket.baudrate = 115200
-socket.port = '/dev/ttyACM0'
+socket.port = '/dev/ttyACM1'
 socket.timeout = 1
 socket.open()
 
@@ -77,16 +77,16 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.x = tagLocation[0]
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = 0.0
-
-		s = math.sin(aprilTag[1]/2);
-		poseMessage.pose.pose.orientation.x = 0.0
-		poseMessage.pose.pose.orientation.y = 0.0
-		poseMessage.pose.pose.orientation.z = 0.0
-		poseMessage.pose.pose.orientation.w = math.cos(aprilTag[1]/2);
+		
+		radians = (math.pi/180)* aprilTag[1]
+		poseMessage.pose.pose.orientation.x = poseMessage.pose.pose.position.x * math.sin(radians/2);
+		poseMessage.pose.pose.orientation.y = poseMessage.pose.pose.position.y * math.sin(radians/2);
+		poseMessage.pose.pose.orientation.z = poseMessage.pose.pose.position.z * math.sin(radians/2);
+		poseMessage.pose.pose.orientation.w = math.cos(radians/2);
 
 		poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
 
 
 		poseTopic.publish(poseMessage)
 		print(poseMessage)
-		sleep(1)
+		sleep(0)
