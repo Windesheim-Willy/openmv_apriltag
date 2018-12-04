@@ -79,9 +79,9 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.z = 0.0
 		
 		radians = (math.pi/180)* aprilTag[1]
-		poseMessage.pose.pose.orientation.x = poseMessage.pose.pose.position.x * math.sin(radians/2);
-		poseMessage.pose.pose.orientation.y = poseMessage.pose.pose.position.y * math.sin(radians/2);
-		poseMessage.pose.pose.orientation.z = poseMessage.pose.pose.position.z * math.sin(radians/2);
+		poseMessage.pose.pose.orientation.x = 0.0
+		poseMessage.pose.pose.orientation.y = 0.0
+		poseMessage.pose.pose.orientation.z = 0.999994075137
 		poseMessage.pose.pose.orientation.w = math.cos(radians/2);
 
 		#poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
