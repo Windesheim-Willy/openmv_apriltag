@@ -7,11 +7,36 @@ from time import sleep
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
+rhumbs = [
+    (0,"N"),
+    (45,"NE"),
+    (90,"E"),
+    (135,"SE"),
+    (180,"S"),
+    (225,"SW"),
+    (270,"W"),
+    (315,"NW"),
+    (360,"N")
+    ]
+
+# Checks if a given number is within a 45 units range of a matching number
+def IsInRange(rotation, angle):
+    if(angle < rotation+22.5 and angle > rotation-22.5):
+        return True
+    else:
+        return False
+
+# Retrieves a rhumb based on rotation angle
+def GetRhumb(rotation):
+    for key, value in rhumbs:
+        if(IsInRange(rotation, key)):
+            return value
+
+
 # Init ROS components
 rospy.init_node('topic_publisher')
 openmvTopic = rospy.Publisher("openmv_apriltag", String , queue_size=25)
 poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size=25)
-
 
 # Init serial components
 socket = serial.Serial()
@@ -78,19 +103,16 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = 0.0
 		
-		radians = (math.pi/180)* aprilTag[1]
+		degrees = aprilTag[1] + 90
+		degrees = (degrees + (degrees % 360) + 360) % 360
+		radians = (math.pi/180) * degrees
 		poseMessage.pose.pose.orientation.x = 0.0
 		poseMessage.pose.pose.orientation.y = 0.0
 		poseMessage.pose.pose.orientation.z = 0.999994075137
 		poseMessage.pose.pose.orientation.w = math.cos(radians/2);
 
-		#poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
-
-		poseMessage.pose.covariance = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-
-
+		poseMessage.pose.covariance = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0]
 
 		poseTopic.publish(poseMessage)
 		print(poseMessage)
-		sleep(0)
+		sleep(0.5)
