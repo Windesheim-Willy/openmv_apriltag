@@ -103,8 +103,8 @@ while not rospy.is_shutdown():
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = 0.0
 		
-		degrees = aprilTag[1] - 90
-		#degrees = (degrees + (degrees % 360) + 360) % 360
+		degrees = aprilTag[1] + 90
+		degrees = (degrees % 360 + 360) % 360;
 		print(GetRhumb(degrees))
 		radians = (math.pi/180) * degrees
 		poseMessage.pose.pose.orientation.x = 0.0
