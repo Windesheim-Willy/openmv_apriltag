@@ -75,12 +75,12 @@ while not rospy.is_shutdown():
 		poseMessage.header.stamp.nsecs = rospy.get_rostime().nsecs
 		poseMessage.pose.pose.position.x = tagLocation[0]
 		poseMessage.pose.pose.position.y = tagLocation[1]
-		poseMessage.pose.pose.position.z = tagLocation[2]
+		poseMessage.pose.pose.position.z = 0.0
 
 		poseMessage.pose.pose.orientation.x = 0.0
 		poseMessage.pose.pose.orientation.y = 0.0
-		poseMessage.pose.pose.orientation.z = 0.0
-		poseMessage.pose.pose.orientation.w = 0.0
+		poseMessage.pose.pose.orientation.z = 0.999994075137
+		poseMessage.pose.pose.orientation.w = 0.00344233787632
 
 		poseMessage.pose.covariance = [0.024762087464210936, -0.0014523279406830625, 0.0, 0.0, 0.0, 0.0, -0.0014523279407967493, 0.013989804469929368, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.004313379282554443]
 
