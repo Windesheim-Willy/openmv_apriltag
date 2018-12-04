@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import serial
 import rospy
+import time
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
@@ -66,11 +67,14 @@ while not rospy.is_shutdown():
 	if aprilTag[0] > 0:
 		tagLocation = tagLocations.get(aprilTag[0], (0.0, 0.0, 0.0))
 		poseMessage = PoseWithCovarianceStamped()
+
 		poseMessage.header.seq = 0
-		poseMessage.header.frame_id = "map"
+		poseMessage.header.frame_id = "/openmv"
+		poseMessage.header.stamp.secs = rospy.get_rostime().secs
+		poseMessage.header.stamp.nsecs = rospy.get_rostime().nsecs
 		poseMessage.pose.pose.position.x = tagLocation[0]
 		poseMessage.pose.pose.position.y = tagLocation[1]
 		poseMessage.pose.pose.position.z = tagLocation[2]
-		poseTopic.publish(poseMessage)
-		print(poseMessage.pose.pose)
 
+		poseTopic.publish(poseMessage)
+		print(poseMessage)
