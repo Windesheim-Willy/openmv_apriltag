@@ -9,6 +9,7 @@ For more information, check out the wiki about the OpenMV Apriltag [Wiki](https:
 When first install:
 
 --Add USB to static name (https://msadowski.github.io/linux-static-port/)
+
 sudo nano /etc/udev/rules.d/99-usb-serial.rules
 
 KERNEL=="ttyACM*", KERNELS=="1-1.1.2:1.0", SYMLINK+="sensor_openmv"
