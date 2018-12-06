@@ -41,7 +41,7 @@ poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size
 # Init serial components
 socket = serial.Serial()
 socket.baudrate = 115200
-socket.port = '/dev/ttyACM1'
+socket.port = '/dev/sensor_openmv'
 socket.timeout = 1
 socket.open()
 
