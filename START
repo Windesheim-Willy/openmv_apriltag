@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+start)
+  ;;
+stop)
+  ;;
+restart)
+  $0 stop
+  $0 start
+  ;;
+status)
+  if [ -e /var/run/openmv_apriltag.pid ]; then
+    echo openmv_apriltag is running, pid=`cat /var/run/openmv_apriltag.pid`
+  else
+    echo openmv_apriltag is NOT running
+    exit 1
+  fi
+  ;;
+*)
+  echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0
