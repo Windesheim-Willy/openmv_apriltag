@@ -34,7 +34,7 @@ def GetRhumb(rotation):
 
 
 # Init ROS components
-rospy.init_node('topic_publisher')
+rospy.init_node('openmv_apriltag')
 openmvTopic = rospy.Publisher("openmv_apriltag", String , queue_size=25)
 poseTopic = rospy.Publisher("initialpose", PoseWithCovarianceStamped, queue_size=25)
 
@@ -109,8 +109,8 @@ while not rospy.is_shutdown():
 		radians = (math.pi/180) * degrees
 		poseMessage.pose.pose.orientation.x = 0.0
 		poseMessage.pose.pose.orientation.y = 0.0
-		poseMessage.pose.pose.orientation.z = 0.999994075137
-		poseMessage.pose.pose.orientation.w = math.cos(radians/2);
+		poseMessage.pose.pose.orientation.z = math.cos(radians/2)
+		poseMessage.pose.pose.orientation.w = 1
 
 		poseMessage.pose.covariance = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 			0.0, 0.0]
 
